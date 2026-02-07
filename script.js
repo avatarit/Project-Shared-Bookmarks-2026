@@ -8,8 +8,7 @@ import { getUserIds} from "./storage.js";
 
 const userSelect = document.getElementById("user-select");
 
-
-let currentUserId = null;
+let currentUserId = 0;
 
 
 // load users into dropdown
@@ -23,12 +22,85 @@ function loadUsers() {
     userSelect.appendChild(option);
   }
 
-  currentUserId = users[0];
-  userSelect.value = currentUserId;
+  //currentUserId = users[0];
+  //why are you storing the value of the first element here ? 
+  //it should be the one that the user has selected 
 
-  showBookmarks(currentUserId);
+  //to identify which user has been selected 
+
+  userSelect.addEventListener("change", function(){
+    currentUserId = userSelect.value;
+    //the change trigger should disply the data related to this user only 
+    //also should store the user number so can be used in saving the new entery data
+    console.log(`current user id is: ${currentUserId}`);
+  }
+
+  );
+
+  
+  // userSelect.value = currentUserId;
+
+ 
+ // showBookmarks(currentUserId);
 }
 
 
 
 window.onload = loadUsers;
+
+
+
+
+// save the data 
+
+// listen for form submit 
+document.getElementById("bookmark-form").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  
+// get the data from user entry 
+let url = document.getElementById("url").value;
+let title = document.getElementById("title").value;
+let description = document.getElementById("description").value;
+
+//temp storage to make sure its working 
+let bookmark = {
+  url:url,
+  title:title, 
+  description:description,
+}
+
+console.log(bookmark);
+saveBookmark(bookmark)
+});
+
+
+function saveBookmark (data){
+  //temp 
+  let userId = currentUserId;
+  console.log("current user id is....");
+  console.log(userId);
+localStorage.setItem(`stored-data-user-${userId}`, JSON.stringify(data));
+console.log("Hello world");
+
+
+}
+
+
+//provided setData function
+//function setData(userId, data) {
+//  localStorage.setItem(`stored-data-user-${userId}`, JSON.stringify(data));
+//}
+
+
+
+
+
+
+
+
+
+
+
+// validate the data 
+
+// display the data 
