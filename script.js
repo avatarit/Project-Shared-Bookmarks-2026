@@ -66,9 +66,10 @@ let url = document.getElementById("url").value;
 let title = document.getElementById("title").value;
 let description = document.getElementById("description").value;
 
-//temp storage to make sure its working 
-let bookmarks = [];
-let bookmark = {
+//check if bookmarks is null 
+if (localStorage.getItem("bookmarks") == null ){
+  let bookmarks = [];
+  let bookmark = {
   url:url,
   title:title, 
   description:description,
@@ -77,6 +78,20 @@ let bookmark = {
 console.log(bookmark);
 bookmarks.push(bookmark);
 saveBookmark(bookmarks);
+
+}
+
+else {
+  let bookmarks = JSON.parse(localStorage.getItem("bookmarks"));
+  bookmarks.push(bookmark);
+  saveBookmark(bookmarks);
+  localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+
+
+}
+
+//temp storage to make sure its working 
+
 
 });
 
