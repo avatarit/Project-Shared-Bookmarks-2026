@@ -8,7 +8,7 @@ import { getUserIds} from "./storage.js";
 
 const userSelect = document.getElementById("user-select");
 
-let currentUserId = 0;
+let currentUserId = "";
 
 
 // load users into dropdown
@@ -26,17 +26,20 @@ function loadUsers() {
   //why are you storing the value of the first element here ? 
   //it should be the one that the user has selected 
 
-  //to identify which user has been selected 
+  //to identify which user has been selected using (change)
 
   userSelect.addEventListener("change", function(){
     currentUserId = userSelect.value;
+    //next stepps
     //the change trigger should disply the data related to this user only 
     //also should store the user number so can be used in saving the new entery data
     console.log(`current user id is: ${currentUserId}`);
+    console.log(typeof(currentUserId));
+    displayData(currentUserId);
   }
 
   );
-
+  
   
   // userSelect.value = currentUserId;
 
@@ -57,12 +60,14 @@ window.onload = loadUsers;
 document.getElementById("bookmark-form").addEventListener("submit", (e)=>{
   e.preventDefault();
   
+  
 // get the data from user entry 
 let url = document.getElementById("url").value;
 let title = document.getElementById("title").value;
 let description = document.getElementById("description").value;
 
 //temp storage to make sure its working 
+let bookmarks = [];
 let bookmark = {
   url:url,
   title:title, 
@@ -70,11 +75,15 @@ let bookmark = {
 }
 
 console.log(bookmark);
-saveBookmark(bookmark)
+bookmarks.push(bookmark);
+saveBookmark(bookmarks);
+
 });
 
 
 function saveBookmark (data){
+//the current code is only saving last entery , the rest is deleted 
+
   //temp 
   let userId = currentUserId;
   console.log("current user id is....");
@@ -82,16 +91,26 @@ function saveBookmark (data){
 localStorage.setItem(`stored-data-user-${userId}`, JSON.stringify(data));
 console.log("Hello world");
 
-
+//we need to retrieve whatever is saved then add the new entery then save them again
 }
 
 
-//provided setData function
-//function setData(userId, data) {
-//  localStorage.setItem(`stored-data-user-${userId}`, JSON.stringify(data));
+// display the bookmarks for selected user
+//when a user is selected , render all bookmark that is entered by the uesr
+
+//export function getData(userId) {
+ // return JSON.parse(localStorage.getItem(`stored-data-user-${userId}`));
 //}
 
+//this should displayed when a user is selected 
+function displayData (userId){
+  let bookmarks= [];
+  console.log(JSON.parse(localStorage.getItem(`stored-data-user-${userId}`)));
 
+  bookmarks.push(JSON.parse(localStorage.getItem(`stored-data-user-${userId}`)));
+  console.log(bookmarks);
+
+}
 
 
 
