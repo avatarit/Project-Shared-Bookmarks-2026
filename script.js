@@ -27,9 +27,7 @@ function loadUsers() {
   //for first window load = when no user is selected
   currentUserId = users[0]; 
   renderBookmarks(currentUserId);
-
 }
-
 window.onload = loadUsers;
 
  //to identify which user has been selected using (change) 
@@ -66,11 +64,6 @@ let bookmarkId = crypto.randomUUID();
   createdAt: createdAt,
   likes: likes,
 }
-//console.log(bookmark);
-
-//testing function = working : )
-//console.log("testing getData:..........");
-//console.log(getData(currentUserId));
 
 //saving this bookmark into bookmarks array then to local storage 
 
@@ -88,24 +81,89 @@ let bookmarkId = crypto.randomUUID();
   console.log(bookmarks);
   saveBookmark(bookmarks);
  }
- 
-
+  renderBookmarks(currentUserId);
 }
+ 
 );
 
-
+//save the bookmarks in the local storage
 function saveBookmark (data){
 setData(currentUserId, data)
 }
 
 
-// display the bookmarks for selected user
-//when a user is selected , render all bookmark that is entered by the uesr
+// render/display the bookmarks for selected user
+// when a user is selected , render all bookmark that is entered by the uesr
 
 //this should displayed when a user is selected 
 function renderBookmarks (currentUserId){
   let bookmarks= getData(currentUserId);
+  //need sortBookmark(bookmarks) to display newest to oldest
   console.log(bookmarks);
+  let noBookmarkText = document.getElementById("no-bookmarks-message");
+  let bookmarkSection = document.getElementById("bookmark-section");
+  let bookmarkList = document.getElementById("bookmark-list");
+  // bookmarkList.className="bookmark-background";
+
+  if(bookmarks === null){
+    noBookmarkText.hidden = false;
+    //need to fixt the type error in console (it apprears when selecting a user with empty bookmarks)
+  }
+  else {
+    // bookmarkSection.textContent= ""; // this is overridden everything i wrote down 
+
+    for (const b of bookmarks){
+      let bookmarkcontainer = document.createElement("div");
+      let li = document.createElement("li");
+      
+      bookmarkList.appendChild(li);
+      li.className="bookmark-background";
+
+      let titleLink = document.createElement("a");
+      titleLink.href= b.url;
+      titleLink.textContent= b.title;
+      titleLink.target= "_blank";
+      li.appendChild(titleLink);
+
+      let desc = document.createElement("p");
+      desc.textContent= b.description;
+      li.appendChild(desc);
+
+      let time = document.createElement("p");
+      time.textContent = b.createdAt;
+      li.appendChild(time);
+      //still need to check what best data type for time to use it in sorting 
+      
+      let copyButton = document.createElement("button");
+      copyButton.type= "button";
+      copyButton.textContent= "click to copy url";
+      copyButton.addEventListener("click", handleCopyButton (b.url));
+      li.appendChild(copyButton);
+
+      function handleCopyButton (){
+        //need to work on this function to handle the copy 
+      }
+
+      let likeButton = document.createElement("button");
+      likeButton.type= "button";
+      likeButton.textContent= "Like";
+      likeButton.addEventListener("click", handleLikeButton );
+      li.appendChild(likeButton);
+
+      function handleLikeButton (){
+        //need to work on this function to handle the like button 
+      }
+
+      //I need to clear everything before i render for new user
+
+
+      
+
+
+      
+    }
+
+  }
 
 }
 
