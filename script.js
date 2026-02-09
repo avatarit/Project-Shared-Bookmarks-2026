@@ -8,15 +8,15 @@ import { getUserIds, getData, setData, clearData} from "./storage.js";
 
 //-------------------------------------------------
 const userSelect = document.getElementById("user-select");
-let currentUserId = "1";
-renderBookmarks(currentUserId);
+let currentUserId = "";
+
 
 // load users into dropdown
 function loadUsers() {
   const users = getUserIds();
   
 
-  //creating the dropdown 
+  //creating the dropdown options
   for (let i = 0; i < users.length; i++) {
     const option = document.createElement("option");
     option.value = users[i];
@@ -24,24 +24,19 @@ function loadUsers() {
     userSelect.appendChild(option);
   }
 
-  //for first load = when no user is selected
+  //for first window load = when no user is selected
   currentUserId = users[0]; 
-  
+  renderBookmarks(currentUserId);
 
-
-  //to identify which user has been selected using (change)
-    userSelect.addEventListener("change", function(){
-    currentUserId = userSelect.value; 
-    renderBookmarks(currentUserId);
-  });
-  
-  //  renderBookmarks(currentUserId); // will change name of function 
- // showBookmarks(currentUserId);
 }
 
 window.onload = loadUsers;
 
-
+ //to identify which user has been selected using (change) 
+ userSelect.addEventListener("change", function(){
+    currentUserId = userSelect.value; 
+    renderBookmarks(currentUserId);
+  });
 
 
 // save the data 
@@ -94,22 +89,6 @@ let bookmarkId = crypto.randomUUID();
   saveBookmark(bookmarks);
  }
  
-// bookmarks.push(bookmark);
-
-
-
-
-// else {
-//   let bookmarks = JSON.parse(localStorage.getItem("bookmarks"));
-//   bookmarks.push(bookmark);
-//   saveBookmark(bookmarks);
-//   localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
-
-
-// }
-
-//temp storage to make sure its working 
-
 
 }
 );
@@ -123,15 +102,10 @@ setData(currentUserId, data)
 // display the bookmarks for selected user
 //when a user is selected , render all bookmark that is entered by the uesr
 
-//export function getData(userId) {
- // return JSON.parse(localStorage.getItem(`stored-data-user-${userId}`));
-//}
-
 //this should displayed when a user is selected 
 function renderBookmarks (currentUserId){
   let bookmarks= getData(currentUserId);
   console.log(bookmarks);
-
 
 }
 
@@ -141,8 +115,27 @@ function renderBookmarks (currentUserId){
 
 
 
+//---------------------------------------------------------------//
+//NEXT STEPS:
+// validate the entered bookmark before saving them 
+// for ex: look for any duplicates   
+
+//
+
+// render on screen using the renderBookmarks()
+// then loop through the array and display the the bookmarks one by one 
+//bookmarks should be newest to oldest 
+
+//like button
+
+//copy url button 
+
+//clear data button 
+
+//deploy web 
+
+//lighthouse 
+
+//test.js
 
 
-// validate the data 
-
-// display the data 
