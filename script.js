@@ -4,11 +4,12 @@
 // Note that when running locally, in order to open a web page which uses modules, you must serve the directory over HTTP e.g. with https://www.npmjs.com/package/http-server
 // You can't open the index.html file using a file:// URL.
 
-import { getUserIds, getData} from "./storage.js";
+import { getUserIds, getData, setData, clearData} from "./storage.js";
 
 //-------------------------------------------------
 const userSelect = document.getElementById("user-select");
-let currentUserId = "";
+let currentUserId = "1";
+renderBookmarks(currentUserId);
 
 // load users into dropdown
 function loadUsers() {
@@ -30,12 +31,11 @@ function loadUsers() {
 
   //to identify which user has been selected using (change)
     userSelect.addEventListener("change", function(){
-    currentUserId = userSelect.value;
-  
-   
+    currentUserId = userSelect.value; 
+    renderBookmarks(currentUserId);
   });
   
-  // displayData(currentUserId); will change name of function 
+  //  renderBookmarks(currentUserId); // will change name of function 
  // showBookmarks(currentUserId);
 }
 
@@ -71,26 +71,31 @@ let bookmarkId = crypto.randomUUID();
   createdAt: createdAt,
   likes: likes,
 }
-console.log(bookmark);
+//console.log(bookmark);
 
 //testing function = working : )
-console.log("testing getData:..........");
-console.log(getData(currentUserId));
+//console.log("testing getData:..........");
+//console.log(getData(currentUserId));
 
 //saving this bookmark into bookmarks array then to local storage 
-//check if bookmarks for this user is null 
+
+//check if bookmarks for this user is empty = null 
  if (getData(currentUserId) === null ){
   let bookmarks = [];
   bookmarks.push(bookmark);
+  saveBookmark(bookmarks);
  }
+
  else {
   let currentBookmarks = getData(currentUserId);
   let bookmarks= [...currentBookmarks, bookmark];
-
+  console.log("this is the combined bookmarks...");
+  console.log(bookmarks);
+  saveBookmark(bookmarks);
  }
  
 // bookmarks.push(bookmark);
-// saveBookmark(bookmarks);
+
 
 
 
@@ -111,16 +116,7 @@ console.log(getData(currentUserId));
 
 
 function saveBookmark (data){
-//the current code is only saving last entery , the rest is deleted 
-
-  //temp 
-  let userId = currentUserId;
-  // console.log("current user id is....");
-  // console.log(userId);
-localStorage.setItem(`stored-data-user-${userId}`, JSON.stringify(data));
-console.log("Hello world");
-
-//we need to retrieve whatever is saved then add the new entery then save them again
+setData(currentUserId, data)
 }
 
 
@@ -132,12 +128,10 @@ console.log("Hello world");
 //}
 
 //this should displayed when a user is selected 
-function displayData (userId){
-  let bookmarks= [];
-  console.log(JSON.parse(localStorage.getItem(`stored-data-user-${userId}`)));
-
-  bookmarks.push(JSON.parse(localStorage.getItem(`stored-data-user-${userId}`)));
+function renderBookmarks (currentUserId){
+  let bookmarks= getData(currentUserId);
   console.log(bookmarks);
+
 
 }
 
