@@ -1,0 +1,10 @@
+
+.bookmark-background{
+    background-color: rgb(217, 202, 202);
+    width: 70%;
+    font: bold;
+    color: black;
+    margin: 1rem;
+    list-style: none;
+}
+
