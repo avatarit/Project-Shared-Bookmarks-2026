@@ -4,17 +4,18 @@
 // Note that when running locally, in order to open a web page which uses modules, you must serve the directory over HTTP e.g. with https://www.npmjs.com/package/http-server
 // You can't open the index.html file using a file:// URL.
 
-import { getUserIds} from "./storage.js";
+import { getUserIds, getData} from "./storage.js";
 
+//-------------------------------------------------
 const userSelect = document.getElementById("user-select");
-
 let currentUserId = "";
-
 
 // load users into dropdown
 function loadUsers() {
   const users = getUserIds();
+  
 
+  //creating the dropdown 
   for (let i = 0; i < users.length; i++) {
     const option = document.createElement("option");
     option.value = users[i];
@@ -22,32 +23,21 @@ function loadUsers() {
     userSelect.appendChild(option);
   }
 
-  //currentUserId = users[0];
-  //why are you storing the value of the first element here ? 
-  //it should be the one that the user has selected 
+  //for first load = when no user is selected
+  currentUserId = users[0]; 
+  
+
 
   //to identify which user has been selected using (change)
-
-  userSelect.addEventListener("change", function(){
+    userSelect.addEventListener("change", function(){
     currentUserId = userSelect.value;
-    //next stepps
-    //the change trigger should disply the data related to this user only 
-    //also should store the user number so can be used in saving the new entery data
-    console.log(`current user id is: ${currentUserId}`);
-    console.log(typeof(currentUserId));
-    displayData(currentUserId);
-  }
-
-  );
   
+   
+  });
   
-  // userSelect.value = currentUserId;
-
- 
+  // displayData(currentUserId); will change name of function 
  // showBookmarks(currentUserId);
 }
-
-
 
 window.onload = loadUsers;
 
@@ -57,43 +47,67 @@ window.onload = loadUsers;
 // save the data 
 
 // listen for form submit 
-document.getElementById("bookmark-form").addEventListener("submit", (e)=>{
+
+const myForm = document.getElementById("bookmark-form");
+myForm.addEventListener("submit", (e)=>{
   e.preventDefault();
-  
-  
-// get the data from user entry 
+
+// making the bookmark  
+// get the data from user entry and creating id ,
+// timestamp and like for each one
+
 let url = document.getElementById("url").value;
 let title = document.getElementById("title").value;
 let description = document.getElementById("description").value;
+let createdAt = new Date().toISOString();
+let likes = 0;
+let bookmarkId = crypto.randomUUID();
 
-//check if bookmarks is null 
-if (localStorage.getItem("bookmarks") == null ){
-  let bookmarks = [];
-  let bookmark = {
+ let bookmark = {
+  bookmarkId: bookmarkId,
   url:url,
   title:title, 
   description:description,
+  createdAt: createdAt,
+  likes: likes,
 }
-
 console.log(bookmark);
-bookmarks.push(bookmark);
-saveBookmark(bookmarks);
 
-}
+//testing function = working : )
+console.log("testing getData:..........");
+console.log(getData(currentUserId));
 
-else {
-  let bookmarks = JSON.parse(localStorage.getItem("bookmarks"));
+//saving this bookmark into bookmarks array then to local storage 
+//check if bookmarks for this user is null 
+ if (getData(currentUserId) === null ){
+  let bookmarks = [];
   bookmarks.push(bookmark);
-  saveBookmark(bookmarks);
-  localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+ }
+ else {
+  let currentBookmarks = getData(currentUserId);
+  let bookmarks= [...currentBookmarks, bookmark];
+
+ }
+ 
+// bookmarks.push(bookmark);
+// saveBookmark(bookmarks);
 
 
-}
+
+// else {
+//   let bookmarks = JSON.parse(localStorage.getItem("bookmarks"));
+//   bookmarks.push(bookmark);
+//   saveBookmark(bookmarks);
+//   localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+
+
+// }
 
 //temp storage to make sure its working 
 
 
-});
+}
+);
 
 
 function saveBookmark (data){
@@ -101,8 +115,8 @@ function saveBookmark (data){
 
   //temp 
   let userId = currentUserId;
-  console.log("current user id is....");
-  console.log(userId);
+  // console.log("current user id is....");
+  // console.log(userId);
 localStorage.setItem(`stored-data-user-${userId}`, JSON.stringify(data));
 console.log("Hello world");
 
