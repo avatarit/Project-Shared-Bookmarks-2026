@@ -52,7 +52,10 @@ myForm.addEventListener("submit", (e)=>{
 let url = document.getElementById("url").value;
 let title = document.getElementById("title").value;
 let description = document.getElementById("description").value;
-let createdAt = new Date().toISOString();
+//let createdAt = new Date().toISOString(); // this for the sort
+// let createdAt = new Date().toLocaleString(); //this for better display on web
+let createdAt = new Date();
+
 let likes = 0;
 let bookmarkId = crypto.randomUUID();
 
@@ -97,13 +100,15 @@ setData(currentUserId, data)
 
 //this should displayed when a user is selected 
 function renderBookmarks (currentUserId){
+
+
   let bookmarks= getData(currentUserId);
   //need sortBookmark(bookmarks) to display newest to oldest
   console.log(bookmarks);
   let noBookmarkText = document.getElementById("no-bookmarks-message");
   let bookmarkSection = document.getElementById("bookmark-section");
   let bookmarkList = document.getElementById("bookmark-list");
-  // bookmarkList.className="bookmark-background";
+  bookmarkList.innerHTML= ""; // to clear the display for new user selected bookmarks
 
   if(bookmarks === null){
     noBookmarkText.hidden = false;
@@ -130,7 +135,8 @@ function renderBookmarks (currentUserId){
       li.appendChild(desc);
 
       let time = document.createElement("p");
-      time.textContent = b.createdAt;
+      time.textContent= "Created at: "
+      time.textContent += new Date(b.createdAt).toLocaleString();
       li.appendChild(time);
       //still need to check what best data type for time to use it in sorting 
       
@@ -166,6 +172,14 @@ function renderBookmarks (currentUserId){
   }
 
 }
+
+// clear the bookmarks 
+const clearButton = document.getElementById("clear-data-btn");
+clearButton.addEventListener("click", ()=> {
+  clearData(currentUserId);
+  console.log(currentUserId, "Deleeeeeeeeted");
+  renderBookmarks(currentUserId);
+});
 
 
 
