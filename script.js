@@ -85,6 +85,7 @@ let bookmarkId = crypto.randomUUID();
   console.log("this is the combined bookmarks...");
   console.log(bookmarks);
   saveBookmark(bookmarks);
+  myForm.reset(); 
  }
   renderBookmarks(currentUserId);
 }
