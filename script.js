@@ -1,18 +1,22 @@
-import { getUserIds, getData, setData, clearData } from "./storage.js";
+// This is a placeholder file which shows how you can access functions defined in other files.
+// It can be loaded into index.html.
+// You can delete the contents of the file once you have understood how it works.
+// Note that when running locally, in order to open a web page which uses modules, you must serve the directory over HTTP e.g. with https://www.npmjs.com/package/http-server
+// You can't open the index.html file using a file:// URL.
 
+import { getUserIds, getData, setData, clearData} from "./storage.js";
+
+//-------------------------------------------------
 const userSelect = document.getElementById("user-select");
-const bookmarkList = document.getElementById("bookmark-list");
-const noBookmarksMessage = document.getElementById("no-bookmarks-message");
-const form = document.getElementById("bookmark-form");
-const clearBtn = document.getElementById("clear-data-btn");
-
-let currentUserId = null;
+let currentUserId = "";
 
 
 // load users into dropdown
 function loadUsers() {
   const users = getUserIds();
+  
 
+  //creating the dropdown options
   for (let i = 0; i < users.length; i++) {
     const option = document.createElement("option");
     option.value = users[i];
@@ -142,18 +146,32 @@ function renderBookmarks (currentUserId){
       copyButton.addEventListener("click", handleCopyButton (b.url));
       li.appendChild(copyButton);
 
-      function handleCopyButton (){
-        //need to work on this function to handle the copy 
+      function handleCopyButton() {
+        navigator.clipboard.writeText(b.url).then(() => {
+          copyButton.textContent = "Copied!";
+        });
       }
 
       let likeButton = document.createElement("button");
       likeButton.type= "button";
-      likeButton.textContent= "Like";
+      likeButton.textContent= "Like  " + (b.likes || 0);
       likeButton.addEventListener("click", handleLikeButton );
       li.appendChild(likeButton);
 
-      function handleLikeButton (){
-        //need to work on this function to handle the like button 
+      function handleLikeButton() {
+
+        let stored = getData(currentUserId) || [];
+      
+        for (let i = 0; i < stored.length; i++) {
+          if (stored[i].bookmarkId === b.bookmarkId) {
+            stored[i].likes = (stored[i].likes || 0) + 1;
+            break;
+          }
+        }
+      
+        setData(currentUserId, stored);
+      
+        renderBookmarks(currentUserId);
       }
 
       //I need to clear everything before i render for new user
@@ -173,8 +191,37 @@ function renderBookmarks (currentUserId){
 const clearButton = document.getElementById("clear-data-btn");
 clearButton.addEventListener("click", ()=> {
   clearData(currentUserId);
-  showBookmarks(currentUserId);
-  
+  console.log(currentUserId, "Deleeeeeeeeted");
+  renderBookmarks(currentUserId);
 });
 
-window.onload = loadUsers;
+
+
+
+
+
+
+//---------------------------------------------------------------//
+//NEXT STEPS:
+// validate the entered bookmark before saving them 
+// for ex: look for any duplicates   
+
+//
+
+// render on screen using the renderBookmarks()
+// then loop through the array and display the the bookmarks one by one 
+//bookmarks should be newest to oldest 
+
+//like button
+
+//copy url button 
+
+//clear data button 
+
+//deploy web 
+
+//lighthouse 
+
+//test.js
+
+
