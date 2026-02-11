@@ -8,16 +8,15 @@ import { getUserIds, getData, setData, clearData} from "./storage.js";
 import { sortBookmarks } from "./logic.js";
 
 
-//-------------------------------------------------
+//----------------------  Users dropdown  ---------------------------
+
 const userSelect = document.getElementById("user-select");
 let currentUserId = "";
-
 
 // load users into dropdown
 function loadUsers() {
   const users = getUserIds();
   
-
   //creating the dropdown options
   for (let i = 0; i < users.length; i++) {
     const option = document.createElement("option");
@@ -39,30 +38,28 @@ window.onload = loadUsers;
   });
 
 
-// save the data 
-
-// listen for form submit 
+  
+//----------------------  Form  --------------------------- 
 
 const myForm = document.getElementById("bookmark-form");
+
+// listen for form submit
 myForm.addEventListener("submit", (e)=>{
   e.preventDefault();
 
-// making the bookmark  
+// making the bookmark  == this could be function
 // get the data from user entry and creating id ,
 // timestamp and like for each one
 
 let url = document.getElementById("url").value;
 let title = document.getElementById("title").value;
 let description = document.getElementById("description").value;
-//let createdAt = new Date().toISOString(); // this for the sort
-// let createdAt = new Date().toLocaleString(); //this for better display on web
-let createdAt = new Date();
-
+let createdAt = new Date().toISOString(); // this for the sort
 let likes = 0;
-let bookmarkId = crypto.randomUUID();
+//let bookmarkId = crypto.randomUUID(); // if sorting is depending on timestamp this should be deleted
 
  let bookmark = {
-  bookmarkId: bookmarkId,
+ // bookmarkId: bookmarkId,
   url:url,
   title:title, 
   description:description,
@@ -70,31 +67,28 @@ let bookmarkId = crypto.randomUUID();
   likes: likes,
 }
 
-//saving this bookmark into bookmarks array then to local storage 
+//saving this bookmark into bookmarks array 
+//then to local storage 
 
 //check if bookmarks for this user is empty = null 
- if (getData(currentUserId) === null ){
-  let bookmarks = [];
-  bookmarks.push(bookmark);
-  saveBookmark(bookmarks);
+  addBookmark(bookmark);
+  myForm.reset();
+
+ function addBookmark (bookmark){
+    let currentBookmarks= getData(currentUserId) || [];
+    currentBookmarks.push(bookmark);
+    saveBookmark(currentBookmarks);
  }
 
- else {
-  let currentBookmarks = getData(currentUserId);
-  let bookmarks= [...currentBookmarks, bookmark];
-  console.log("this is the combined bookmarks...");
-  console.log(bookmarks);
-  saveBookmark(bookmarks);
-  myForm.reset(); 
- }
   renderBookmarks(currentUserId);
 }
+
  
 );
 
 //save the bookmarks in the local storage
 function saveBookmark (data){
-setData(currentUserId, data)
+setData(currentUserId, data);
 }
 
 
@@ -104,21 +98,30 @@ setData(currentUserId, data)
 //this should displayed when a user is selected 
 function renderBookmarks (currentUserId){
 
-
   let bookmarks= getData(currentUserId);
-  //need sortBookmark(bookmarks) to display newest to oldest
-  console.log(bookmarks);
   let noBookmarkText = document.getElementById("no-bookmarks-message");
-  let bookmarkSection = document.getElementById("bookmark-section");
+ // let bookmarkSection = document.getElementById("bookmark-section");
   let bookmarkList = document.getElementById("bookmark-list");
-  bookmarkList.innerHTML= ""; // to clear the display for new user selected bookmarks
+  bookmarkList.innerHTML= ""; // to clear the display when changing the users, so only displaying the selected user's bookmarks
 
-  if(bookmarks === null){
-    noBookmarkText.hidden = false;
-    //need to fixt the type error in console (it apprears when selecting a user with empty bookmarks)
-  }
-  else {
-    // bookmarkSection.textContent= ""; // this is overridden everything i wrote down 
+  noBookmarkTextchecker(bookmarks); 
+
+  function noBookmarkTextchecker (bookmarks){
+        if(bookmarks === null || bookmarks.length === 0){
+          noBookmarkText.hidden = false;
+         }
+        else {
+          noBookmarkText.hidden = true;
+         }
+        }
+  // if(bookmarks === null){
+  //   noBookmarkText.hidden = false;
+  //   //need to fixt the type error in console (it apprears when selecting a user with empty bookmarks)
+  // }
+  // else {
+  //   // bookmarkSection.textContent= ""; // this is overridden everything i wrote down 
+  //     noBookmarkText.hidden = true;
+
     bookmarks = sortBookmarks(bookmarks);
 
     for (const b of bookmarks){
@@ -139,7 +142,7 @@ function renderBookmarks (currentUserId){
 
       let time = document.createElement("p");
       time.textContent= "Created at: "
-      time.textContent += new Date(b.createdAt).toLocaleString();
+      time.textContent += new Date(b.createdAt).toLocaleString();  
       bookmarkcontainer.appendChild(time);
       //still need to check what best data type for time to use it in sorting 
       
@@ -178,25 +181,14 @@ function renderBookmarks (currentUserId){
       
         renderBookmarks(currentUserId);
       }
-
-      //I need to clear everything before i render for new user
-
-
-      
-
-
-      
     }
-
-  }
-
+  //}
 }
 
-// clear the bookmarks 
+// ----------  Clear all the bookmarks for selected user  ------------------
 const clearButton = document.getElementById("clear-data-btn");
 clearButton.addEventListener("click", ()=> {
   clearData(currentUserId);
-  console.log(currentUserId, "Deleeeeeeeeted");
   renderBookmarks(currentUserId);
 });
 
@@ -229,3 +221,15 @@ clearButton.addEventListener("click", ()=> {
 
 //test.js
 
+//need to work on a case , 
+//when selecting a user that has no bookmarks => messege shown for empty bookmarks
+//this messege needs to be deleted 
+//1- when the new bookmarks is added 
+//Now : adding this after checking the bookmarks for the user is not empty 
+//      noBookmarkText.hidden = true;
+// the messege is still there when the first bookmark is added , then its hidden after the second one is there 
+// solved 
+// but the form is not reseted after the first entery yet 
+//its only resetting after that , for example if I'm enering the second bookmark for this user 
+
+// do we need validation if this bookmark duplicated or not ? 
