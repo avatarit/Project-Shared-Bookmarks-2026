@@ -6,6 +6,13 @@
 
 import { getUserIds, getData, setData, clearData} from "./storage.js";
 
+export function sortBookmarks(bookmarks) {
+  return bookmarks.slice().sort(function (a, b) {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+}
+if (typeof document !== "undefined") {
+
 //-------------------------------------------------
 const userSelect = document.getElementById("user-select");
 let currentUserId = "";
@@ -116,6 +123,7 @@ function renderBookmarks (currentUserId){
   }
   else {
     // bookmarkSection.textContent= ""; // this is overridden everything i wrote down 
+    bookmarks = sortBookmarks(bookmarks);
 
     for (const b of bookmarks){
       let bookmarkcontainer = document.createElement("div");
@@ -141,16 +149,18 @@ function renderBookmarks (currentUserId){
       //still need to check what best data type for time to use it in sorting 
       
       let copyButton = document.createElement("button");
-      copyButton.type= "button";
-      copyButton.textContent= "click to copy url";
-      copyButton.addEventListener("click", handleCopyButton (b.url));
-      li.appendChild(copyButton);
-
-      function handleCopyButton() {
+      copyButton.type = "button";
+      copyButton.textContent = "Click to copy URL";
+      
+      copyButton.addEventListener("click", function () {
         navigator.clipboard.writeText(b.url).then(() => {
           copyButton.textContent = "Copied!";
         });
-      }
+      });
+      
+      li.appendChild(copyButton);
+      
+
 
       let likeButton = document.createElement("button");
       likeButton.type= "button";
@@ -224,4 +234,4 @@ clearButton.addEventListener("click", ()=> {
 
 //test.js
 
-
+}
