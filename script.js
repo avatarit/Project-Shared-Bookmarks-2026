@@ -11,6 +11,7 @@ export function sortBookmarks(bookmarks) {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
 }
+
 if (typeof document !== "undefined") {
 
 //-------------------------------------------------
@@ -127,30 +128,29 @@ function renderBookmarks (currentUserId){
 
     for (const b of bookmarks){
       let bookmarkcontainer = document.createElement("div");
-      let li = document.createElement("li");
       
-      bookmarkList.appendChild(li);
-      li.className="bookmark-background";
+      bookmarkList.appendChild(bookmarkcontainer);
+      bookmarkcontainer.className="bookmark-background";
 
       let titleLink = document.createElement("a");
       titleLink.href= b.url;
       titleLink.textContent= b.title;
       titleLink.target= "_blank";
-      li.appendChild(titleLink);
+      bookmarkcontainer.appendChild(titleLink);
 
       let desc = document.createElement("p");
       desc.textContent= b.description;
-      li.appendChild(desc);
+      bookmarkcontainer.appendChild(desc);
 
       let time = document.createElement("p");
       time.textContent= "Created at: "
       time.textContent += new Date(b.createdAt).toLocaleString();
-      li.appendChild(time);
+      bookmarkcontainer.appendChild(time);
       //still need to check what best data type for time to use it in sorting 
       
       let copyButton = document.createElement("button");
       copyButton.type = "button";
-      copyButton.textContent = "Click to copy URL";
+      copyButton.textContent = "Copy to clipboard";
       
       copyButton.addEventListener("click", function () {
         navigator.clipboard.writeText(b.url).then(() => {
@@ -158,7 +158,7 @@ function renderBookmarks (currentUserId){
         });
       });
       
-      li.appendChild(copyButton);
+      bookmarkcontainer.appendChild(copyButton);
       
 
 
@@ -166,14 +166,14 @@ function renderBookmarks (currentUserId){
       likeButton.type= "button";
       likeButton.textContent= "Like  " + (b.likes || 0);
       likeButton.addEventListener("click", handleLikeButton );
-      li.appendChild(likeButton);
+      bookmarkcontainer.appendChild(likeButton);
 
       function handleLikeButton() {
 
         let stored = getData(currentUserId) || [];
       
         for (let i = 0; i < stored.length; i++) {
-          if (stored[i].bookmarkId === b.bookmarkId) {
+          if (stored[i].createdAt === b.createdAt) {
             stored[i].likes = (stored[i].likes || 0) + 1;
             break;
           }
