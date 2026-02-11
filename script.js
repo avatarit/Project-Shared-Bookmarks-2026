@@ -146,18 +146,32 @@ function renderBookmarks (currentUserId){
       copyButton.addEventListener("click", handleCopyButton (b.url));
       li.appendChild(copyButton);
 
-      function handleCopyButton (){
-        //need to work on this function to handle the copy 
+      function handleCopyButton() {
+        navigator.clipboard.writeText(b.url).then(() => {
+          copyButton.textContent = "Copied!";
+        });
       }
 
       let likeButton = document.createElement("button");
       likeButton.type= "button";
-      likeButton.textContent= "Like";
+      likeButton.textContent= "Like  " + (b.likes || 0);
       likeButton.addEventListener("click", handleLikeButton );
       li.appendChild(likeButton);
 
-      function handleLikeButton (){
-        //need to work on this function to handle the like button 
+      function handleLikeButton() {
+
+        let stored = getData(currentUserId) || [];
+      
+        for (let i = 0; i < stored.length; i++) {
+          if (stored[i].bookmarkId === b.bookmarkId) {
+            stored[i].likes = (stored[i].likes || 0) + 1;
+            break;
+          }
+        }
+      
+        setData(currentUserId, stored);
+      
+        renderBookmarks(currentUserId);
       }
 
       //I need to clear everything before i render for new user
