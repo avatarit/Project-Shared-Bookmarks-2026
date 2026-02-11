@@ -5,14 +5,8 @@
 // You can't open the index.html file using a file:// URL.
 
 import { getUserIds, getData, setData, clearData} from "./storage.js";
+import { sortBookmarks } from "./logic.js";
 
-export function sortBookmarks(bookmarks) {
-  return bookmarks.slice().sort(function (a, b) {
-    return new Date(b.createdAt) - new Date(a.createdAt);
-  });
-}
-
-if (typeof document !== "undefined") {
 
 //-------------------------------------------------
 const userSelect = document.getElementById("user-select");
@@ -234,4 +228,3 @@ clearButton.addEventListener("click", ()=> {
 
 //test.js
 
-}
