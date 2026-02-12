@@ -37,8 +37,7 @@ window.onload = loadUsers;
     renderBookmarks(currentUserId);
   });
 
-
-  
+ 
 //----------------------  Form  --------------------------- 
 
 const myForm = document.getElementById("bookmark-form");
@@ -47,43 +46,34 @@ const myForm = document.getElementById("bookmark-form");
 myForm.addEventListener("submit", (e)=>{
   e.preventDefault();
 
-// making the bookmark  == this could be function
-// get the data from user entry and creating id ,
-// timestamp and like for each one
-
+// get the data from user entry and creating timestamp, like button and copy button for each one
 let url = document.getElementById("url").value;
 let title = document.getElementById("title").value;
 let description = document.getElementById("description").value;
 let createdAt = new Date().toISOString(); // this for the sort
 let likes = 0;
-//let bookmarkId = crypto.randomUUID(); // if sorting is depending on timestamp this should be deleted
 
  let bookmark = {
- // bookmarkId: bookmarkId,
   url:url,
   title:title, 
   description:description,
   createdAt: createdAt,
   likes: likes,
 }
-
   addBookmark(bookmark);
   myForm.reset();
   renderBookmarks(currentUserId);
 }
-
- 
 );
 
-// addBookmark(bookmark) will add the new entered bookmark 
-// with the old ones then send them to saveBookmark()
+// addBookmark() will add the new bookmark to the old ones then send them to saveBookmark()
 function addBookmark (bookmark){
     let currentBookmarks= getData(currentUserId) || [];
     currentBookmarks.push(bookmark);
     saveBookmark(currentBookmarks);
  }
 
-//save the bookmarks in the local storage
+//save the bookmarks into local storage
 function saveBookmark (data){
     setData(currentUserId, data);
   }
@@ -138,7 +128,7 @@ function renderBookmarks (currentUserId){
       
       let likeButton = document.createElement("button");
       likeButton.type= "button";
-      likeButton.textContent= "Like  " + (b.likes || 0); // can we change this to "like" + b.likes ? 
+      likeButton.textContent= "Like  " + (b.likes || 0); 
       likeButton.addEventListener("click", handleLikeButton );
       bookmarkcontainer.appendChild(likeButton);
 
@@ -146,7 +136,7 @@ function renderBookmarks (currentUserId){
         let stored = getData(currentUserId) || [];
         for (let i = 0; i < stored.length; i++) {
           if (stored[i].createdAt === b.createdAt) {
-            stored[i].likes = (stored[i].likes || 0) + 1;// can we change this from (stored[i].likes || 0) to stored[i].likes .. because likes was first intiated with the value 0 
+            stored[i].likes = (stored[i].likes || 0) + 1; 
             break;
           }
         }
@@ -163,45 +153,3 @@ clearButton.addEventListener("click", ()=> {
   clearData(currentUserId);
   renderBookmarks(currentUserId);
 });
-
-
-
-
-
-
-
-//---------------------------------------------------------------//
-//NEXT STEPS:
-// validate the entered bookmark before saving them 
-// for ex: look for any duplicates   
-
-//
-
-// render on screen using the renderBookmarks()
-// then loop through the array and display the the bookmarks one by one 
-//bookmarks should be newest to oldest 
-
-//like button
-
-//copy url button 
-
-//clear data button 
-
-//deploy web 
-
-//lighthouse 
-
-//test.js
-
-//need to work on a case , 
-//when selecting a user that has no bookmarks => messege shown for empty bookmarks
-//this messege needs to be deleted 
-//1- when the new bookmarks is added 
-//Now : adding this after checking the bookmarks for the user is not empty 
-//      noBookmarkText.hidden = true;
-// the messege is still there when the first bookmark is added , then its hidden after the second one is there 
-// solved 
-// but the form is not reseted after the first entery yet 
-//its only resetting after that , for example if I'm enering the second bookmark for this user 
-
-// do we need validation if this bookmark duplicated or not ? 
