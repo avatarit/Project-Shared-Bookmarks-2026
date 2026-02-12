@@ -48,7 +48,7 @@ This document explains how we tested each rubric requirement for the Shared Book
 
 **Unit test:**
 
-- Wrote a unit test for sorting logic in `script.test.js`.
+- Wrote a unit test for sorting logic in `logic.test.js`.
 - To make testing possible, I wrapped the DOM-related code in `script.js` inside an `if (typeof document !== "undefined")` block so that only the pure functions (such as sorting) are imported and tested in Node.
 - Ran the tests using `npm test` and confirmed they passed.
 
@@ -57,14 +57,16 @@ This document explains how we tested each rubric requirement for the Shared Book
 **How I tested:**
 
 - I added a new bookmark, the inputs are title, url and description.
-- Then after submitting the form I can see the title and description and the created at timestamp displayed for the one I created and for the other bookmarks as well.
+- Then after submitting the form, the title , description and the created at timestamp displayed for the one I created and for the other bookmarks as well.
+  another case:
+- I selected another user to view thier bookmarks, then confirmed that each bookmark has a title, description and created at timestamp displayed
 
 ## 6) Each bookmark’s title is a link to the bookmark’s URL
 
 **How I tested:**
 
 - I added a new bookmark, the inputs are title, url and description.
-- Then after submitting the form, I clicked on the title and it took me to the matching matching url that I entered.
+- Then after submitting the form, the title appeared as a link, also I clicked on the title and it took me to the matching url that I entered.
 
 ## 7) Each bookmark's "Copy to clipboard" button must copy the URL of the bookmark
 
@@ -78,50 +80,43 @@ This document explains how we tested each rubric requirement for the Shared Book
 
 **How I tested:**
 
--
+-I tested this by selecting different users and clicking the like button on many bookmarks. I confirmed that each bookmark’s like counter increased independently and did not affect other bookmarks. I then refreshed the page and reopened the website to verify that the like counts were still saved for each user and bookmark.
 
 ## 9) The website must contain a form with inputs for a URL, a title, and a description. The form should have a submit button.
 
 **How I tested:**
 
--
+-I opened the website and checked that the form is visible. I confirmed that it contains three input boxes (URL, title, and description) and a submit button. I also entered sample data in all fields and clicked the submit button to make sure the form works correctly.
 
 ## 10) Submitting the form adds a new bookmark for the relevant user only
 
-**How I tested:**
+**How I tested it:**
 
--
+- I selected user number 3.
+- I added a new bookmark for this user. the title is tiktok with the url and description. this bookmark is unique and wasn't added before.
+- after submitting the form, the bookmark is added to only user 3.
+- this was checked by navigating through all other users, to make sure the new bookmark wasn't added there, and also by checking the localstorage in divtools>applications , so I can see only user no. 3 has tiktok bookmark saved.
 
 ## 11) After creating a new bookmark, the list of bookmarks for the current user is shown, including the new bookmark
 
-**How I tested:**
+**How I tested it:**
 
--
+- I selected a user with previousely saved 5 bookmarks .
+- Then I added a new bookmark, named yahoo with the url and description.
+- all the 6 bookmarks are displayed including the new one.
 
 ## 12) The website must score 100 for accessibility in Lighthouse
 
-**How I tested:**
+**How I tested it:**
 
--
+- I ran lighthouse for different users with different bookmarks numbers:
+  case 1 : I selected a user with 3 bookmarks, then the website's accessibility scored 100%
+  case 2 : I selected a user with 0 bookmarks, then the website's accessibility scored 100%
 
 ## 13) Unit tests must be written for at least one non-trivial function
 
 **How I tested:**
 
-- ***
+- I tested sortBookmarks(bookmarks) ,sorting the bookmark in a reverse order feature by writing automated unit tests. I created a test to check that bookmarks are sorted with the newest first. The sorting test used sample bookmark data with different dates and confirmed that the most recent bookmark appears at the beginning of the array.
 
-1- The website must contain a drop-down which lists five users
-2- Selecting a user must display the list of bookmarks for the relevant user
-3- If there are no bookmarks for the selected user, a message is displayed to explain this
-4- The list of bookmarks must be shown in reverse chronological order
-5- Each bookmark has a title, description and created at timestamp displayed
-6- Each bookmark’s title is a link to the bookmark’s URL
-7- Each bookmark's "Copy to clipboard" button must copy the URL of the bookmark
-8- Each bookmark's like counter works independently, and persists data across sessions
-9- The website must contain a form with inputs for a URL, a title, and a description. The form should have a submit button.
-10- Submitting the form adds a new bookmark for the relevant user only
-11- After creating a new bookmark, the list of bookmarks for the current user is shown, including the new bookmark
-12- The website must score 100 for accessibility in Lighthouse
-13- Unit tests must be written for at least one non-trivial function
-
----
+- I tested getUsersIds() to verify the number of users returened is correct.

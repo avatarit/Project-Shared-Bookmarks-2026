@@ -67,68 +67,49 @@ let likes = 0;
   likes: likes,
 }
 
-//saving this bookmark into bookmarks array 
-//then to local storage 
-
-//check if bookmarks for this user is empty = null 
   addBookmark(bookmark);
   myForm.reset();
-
- function addBookmark (bookmark){
-    let currentBookmarks= getData(currentUserId) || [];
-    currentBookmarks.push(bookmark);
-    saveBookmark(currentBookmarks);
- }
-
   renderBookmarks(currentUserId);
 }
 
  
 );
 
+// addBookmark(bookmark) will add the new entered bookmark 
+// with the old ones then send them to saveBookmark()
+function addBookmark (bookmark){
+    let currentBookmarks= getData(currentUserId) || [];
+    currentBookmarks.push(bookmark);
+    saveBookmark(currentBookmarks);
+ }
+
 //save the bookmarks in the local storage
 function saveBookmark (data){
-setData(currentUserId, data);
-}
+    setData(currentUserId, data);
+  }
 
-
-// render/display the bookmarks for selected user
-// when a user is selected , render all bookmark that is entered by the uesr
-
-//this should displayed when a user is selected 
+// render/display the bookmarks for selected user from the local storage
 function renderBookmarks (currentUserId){
 
   let bookmarks= getData(currentUserId);
   let noBookmarkText = document.getElementById("no-bookmarks-message");
- // let bookmarkSection = document.getElementById("bookmark-section");
   let bookmarkList = document.getElementById("bookmark-list");
   bookmarkList.innerHTML= ""; // to clear the display when changing the users, so only displaying the selected user's bookmarks
 
-  noBookmarkTextchecker(bookmarks); 
-
-  function noBookmarkTextchecker (bookmarks){
-        if(bookmarks === null || bookmarks.length === 0){
-          noBookmarkText.hidden = false;
-         }
-        else {
-          noBookmarkText.hidden = true;
-         }
-        }
-  // if(bookmarks === null){
-  //   noBookmarkText.hidden = false;
-  //   //need to fixt the type error in console (it apprears when selecting a user with empty bookmarks)
-  // }
-  // else {
-  //   // bookmarkSection.textContent= ""; // this is overridden everything i wrote down 
-  //     noBookmarkText.hidden = true;
-
+  if(bookmarks === null){
+    noBookmarkText.hidden = false;
+  }
+  else {
+    noBookmarkText.hidden = true;
     bookmarks = sortBookmarks(bookmarks);
+
+    //loop through bookmarks to create the containers for the bookmarks on web
+    //and create all bookmark details inside container
 
     for (const b of bookmarks){
       let bookmarkcontainer = document.createElement("div");
-      
       bookmarkList.appendChild(bookmarkcontainer);
-      bookmarkcontainer.className="bookmark-background";
+      bookmarkcontainer.className="bookmark-background"; 
 
       let titleLink = document.createElement("a");
       titleLink.href= b.url;
@@ -136,53 +117,44 @@ function renderBookmarks (currentUserId){
       titleLink.target= "_blank";
       bookmarkcontainer.appendChild(titleLink);
 
-      let desc = document.createElement("p");
-      desc.textContent= b.description;
-      bookmarkcontainer.appendChild(desc);
+      let description = document.createElement("p");
+      description.textContent= b.description;
+      bookmarkcontainer.appendChild(description);
 
       let time = document.createElement("p");
       time.textContent= "Created at: "
       time.textContent += new Date(b.createdAt).toLocaleString();  
       bookmarkcontainer.appendChild(time);
-      //still need to check what best data type for time to use it in sorting 
       
       let copyButton = document.createElement("button");
       copyButton.type = "button";
       copyButton.textContent = "Copy to clipboard";
-      
       copyButton.addEventListener("click", function () {
         navigator.clipboard.writeText(b.url).then(() => {
           copyButton.textContent = "Copied!";
         });
       });
-      
       bookmarkcontainer.appendChild(copyButton);
       
-
-
       let likeButton = document.createElement("button");
       likeButton.type= "button";
-      likeButton.textContent= "Like  " + (b.likes || 0);
+      likeButton.textContent= "Like  " + (b.likes || 0); // can we change this to "like" + b.likes ? 
       likeButton.addEventListener("click", handleLikeButton );
       bookmarkcontainer.appendChild(likeButton);
 
       function handleLikeButton() {
-
         let stored = getData(currentUserId) || [];
-      
         for (let i = 0; i < stored.length; i++) {
           if (stored[i].createdAt === b.createdAt) {
-            stored[i].likes = (stored[i].likes || 0) + 1;
+            stored[i].likes = (stored[i].likes || 0) + 1;// can we change this from (stored[i].likes || 0) to stored[i].likes .. because likes was first intiated with the value 0 
             break;
           }
         }
-      
         setData(currentUserId, stored);
-      
-        renderBookmarks(currentUserId);
+        renderBookmarks(currentUserId); 
       }
     }
-  //}
+  }
 }
 
 // ----------  Clear all the bookmarks for selected user  ------------------
