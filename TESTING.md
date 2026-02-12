@@ -49,12 +49,8 @@ This document explains how we tested each rubric requirement for the Shared Book
 **Unit test:**
 
 - Wrote a unit test for sorting logic in `logic.test.js`.
-- To make testing possible, I wrapped the DOM-related code in `script.js` inside an `if (typeof document !== "undefined")` block so that only the pure functions (such as sorting) are imported and tested in Node.
-- Ran the tests using `npm test` and confirmed they passed.
-
-suggestion --->
-
 - I tested sortBookmarks() function ,sorting the bookmark in a reverse chronological order feature by writing automated unit tests. I created a test to check that bookmarks are sorted with the newest first. The sorting test used sample bookmark data with different dates and confirmed that the most recent bookmark appears at the beginning of the array.
+- Ran the tests using `npm test` and confirmed they passed.
 
 ## 5) Each bookmark has a title, description and created at timestamp displayed
 
