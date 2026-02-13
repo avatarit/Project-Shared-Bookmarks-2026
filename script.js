@@ -41,13 +41,13 @@ myForm.addEventListener("submit", (e)=>{
   e.preventDefault();
 
 // get the data from user entry and creating timestamp, like button and copy button for each one
-let url = document.getElementById("url").value;
-let title = document.getElementById("title").value;
-let description = document.getElementById("description").value;
-let createdAt = new Date().toISOString(); // this for the sort
-let likes = 0;
+const url = document.getElementById("url").value;
+const title = document.getElementById("title").value;
+const description = document.getElementById("description").value;
+const createdAt = new Date().toISOString(); // this for the sort
+const likes = 0;
 
- let bookmark = {
+ const bookmark = {
   url:url,
   title:title, 
   description:description,
@@ -66,7 +66,7 @@ let likes = 0;
 
 // addBookmark() will add the new bookmark to the old ones then send them to saveBookmark()
 function addBookmark (bookmark){
-    let currentBookmarks= getData(currentUserId) || [];
+    const currentBookmarks= getData(currentUserId) || [];
     currentBookmarks.push(bookmark);
     saveBookmark(currentBookmarks);
  }
@@ -79,71 +79,74 @@ function saveBookmark (data){
 // render/display the bookmarks for selected user from the local storage
 function renderBookmarks (currentUserId){
 
-  let bookmarks= getData(currentUserId);
-  let noBookmarkText = document.getElementById("no-bookmarks-message");
-  let bookmarkList = document.getElementById("bookmark-list");
+  const bookmarks= getData(currentUserId);
+  const noBookmarkText = document.getElementById("no-bookmarks-message");
+  const bookmarkList = document.getElementById("bookmark-list");
   bookmarkList.innerHTML= ""; // to clear the display when changing the users, so only displaying the selected user's bookmarks
 
-  if(bookmarks === null){
+  if (!bookmarks || bookmarks.length === 0) {
     noBookmarkText.hidden = false;
+    return;
   }
-  else {
+ 
     noBookmarkText.hidden = true;
-    bookmarks = sortBookmarks(bookmarks);
+    const sortedBookmarks = sortBookmarks(bookmarks);
 
     //loop through bookmarks to create the containers for the bookmarks on web
     //and create all bookmark details inside container
 
-    for (const b of bookmarks){
-      let bookmarkcontainer = document.createElement("div");
+    for (const b of sortedBookmarks){
+      const bookmarkcontainer = document.createElement("div");
       bookmarkList.appendChild(bookmarkcontainer);
       bookmarkcontainer.className="bookmark-background"; 
 
-      let titleLink = document.createElement("a");
+      const titleLink = document.createElement("a");
       titleLink.href= b.url;
       titleLink.textContent= b.title;
       titleLink.target= "_blank";
       bookmarkcontainer.appendChild(titleLink);
 
-      let description = document.createElement("p");
+      const description = document.createElement("p");
       description.textContent= b.description;
       bookmarkcontainer.appendChild(description);
 
-      let time = document.createElement("p");
+      const time = document.createElement("p");
       time.textContent= "Created at: "
       time.textContent += new Date(b.createdAt).toLocaleString();  
       bookmarkcontainer.appendChild(time);
       
-      let copyButton = document.createElement("button");
+      const copyButton = document.createElement("button");
       copyButton.type = "button";
       copyButton.textContent = "Copy to clipboard";
       copyButton.addEventListener("click", function () {
         navigator.clipboard.writeText(b.url).then(() => {
           copyButton.textContent = "Copied!";
+          setTimeout(() => {
+            copyButton.textContent = "Copy to clipboard";
+          }, 1000);
         });
       });
+      
       bookmarkcontainer.appendChild(copyButton);
       
-      let likeButton = document.createElement("button");
+      const likeButton = document.createElement("button");
       likeButton.type= "button";
       likeButton.textContent= "Like  " + (b.likes || 0); 
-      likeButton.addEventListener("click", handleLikeButton );
       bookmarkcontainer.appendChild(likeButton);
-
-      function handleLikeButton() {
-        let stored = getData(currentUserId) || [];
+      likeButton.addEventListener("click", function () {
+        const stored = getData(currentUserId) || [];
         for (let i = 0; i < stored.length; i++) {
           if (stored[i].createdAt === b.createdAt) {
-            stored[i].likes = (stored[i].likes || 0) + 1; 
+            stored[i].likes += 1;
             break;
           }
         }
         setData(currentUserId, stored);
-        renderBookmarks(currentUserId); 
-      }
+        renderBookmarks(currentUserId);
+      });
     }
   }
-}
+
 
 // ----------  Clear all the bookmarks for selected user  ------------------
 const clearButton = document.getElementById("clear-data-btn");
