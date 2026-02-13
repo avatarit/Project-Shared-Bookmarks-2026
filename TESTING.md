@@ -8,9 +8,9 @@ This document explains how we tested each rubric requirement for the Shared Book
 
 **How we tested:**
 
-- Opened the website in the browser.
-- Checked the user drop-down and confirmed it contains exactly 5 options: User 1, User 2, User 3, User 4, User 5.
-- Also verified `getUserIds()` returns `["1","2","3","4","5"]` in `storage.js`.
+- We opened the website in the browser.
+- We checked the user drop-down and confirmed it contains exactly 5 options: User 1, User 2, User 3, User 4, User 5.
+- We also verified getUserIds() returns ["1","2","3","4","5"] in storage.js.
 - We wrote a unit test that checks:
   getUserIds().length === 5
   and ran it using npm test.
@@ -21,102 +21,123 @@ This document explains how we tested each rubric requirement for the Shared Book
 
 **How we tested:**
 
-- Selected User 1 and added a bookmark using the form.
-- Switched to User 2 and confirmed User 1’s bookmark is NOT shown.
-- Added a different bookmark for User 2.
-- Switched back and forth between users and confirmed each user shows only their own bookmarks.
+- We selected User 1 and added a bookmark using the form.
+- We switched to User 2 and confirmed User 1’s bookmark is NOT shown.
+- We added a different bookmark for User 2.
+- We switched back and forth between users and confirmed each user shows only their own bookmarks.
 
 ---
 
 ## 3) If there are no bookmarks for the selected user, a message is displayed to explain this
 
-**How I tested:**
+**How we tested:**
 
-- Clicked the "Clear" button for a user (or used `clearData(userId)` during development).
-- Selected that user from the drop-down and confirmed the “no bookmarks” message is visible.
-- Added a new bookmark and confirmed the message disappears and the list appears.
+- We clicked the "Clear" button for a user (or used clearData(userId) during development).
+- We selected that user from the drop-down and confirmed the “no bookmarks” message is visible.
+- We added a new bookmark and confirmed the message disappears and the list appears.
 
 ---
 
 ## 4) The list of bookmarks must be shown in reverse chronological order
 
-**How I tested:**
+**How we tested:**
 
-- Added two bookmarks for the same user with a small time gap (one after the other).
-- Confirmed the most recently added bookmark appears at the top of the list.
-- Verified the sorting logic in code uses timestamp comparison (newest first).
+- We added two bookmarks for the same user with a small time gap (one after the other).
+- We confirmed the most recently added bookmark appears at the top of the list.
+- We verified the sorting logic in code uses timestamp comparison (newest first).
+- Sorting was also verified using automated unit tests for sortBookmarks() (see section 13).
 
-**Unit test:**
-
-- Wrote a unit test for sorting logic in `logic.test.js`.
-- I tested sortBookmarks() function ,sorting the bookmark in a reverse chronological order feature by writing automated unit tests. I created a test to check that bookmarks are sorted with the newest first. The sorting test used sample bookmark data with different dates and confirmed that the most recent bookmark appears at the beginning of the array.
-- Ran the tests using `npm test` and confirmed they passed.
+---
 
 ## 5) Each bookmark has a title, description and created at timestamp displayed
 
-**How I tested:**
+**How we tested:**
 
-- I added a new bookmark, the inputs are title, url and description.
-- Then after submitting the form, the title , description and the created at timestamp displayed for the one I created and for the other bookmarks as well.
-  another case:
-- I selected another user to view thier bookmarks, then confirmed that each bookmark has a title, description and created at timestamp displayed
+- We added a new bookmark using the inputs for title, URL and description.
+- After submitting the form, the title, description and the created at timestamp were displayed correctly for the new bookmark and existing bookmarks.
+- As another case, we selected another user to view their bookmarks and confirmed that each bookmark has a title, description and created at timestamp displayed.
+
+---
 
 ## 6) Each bookmark’s title is a link to the bookmark’s URL
 
-**How I tested:**
+**How we tested:**
 
-- I added a new bookmark, the inputs are title, url and description.
-- Then after submitting the form, the title appeared as a link, also I clicked on the title and it took me to the matching url that I entered.
+- We added a new bookmark using the form.
+- After submitting the form, the title appeared as a clickable link.
+- We clicked on the title and confirmed it opened the matching URL that was entered.
+
+---
 
 ## 7) Each bookmark's "Copy to clipboard" button must copy the URL of the bookmark
 
-**How I tested:**
+**How we tested:**
 
 - Each displayed bookmark has a "Copy to clipboard" button.
-- after clicking on the button it successfully copied the url.
-- I pasted the copied url into the browser, it opened the matching url for the bookmark I intially clicked its copy button.
+- After clicking the button, it successfully copied the URL.
+- We pasted the copied URL into the browser and confirmed it opened the matching URL for the bookmark we initially copied.
+
+---
 
 ## 8) Each bookmark's like counter works independently, and persists data across sessions
 
-**How I tested:**
+**How we tested:**
 
--I tested this by selecting different users and clicking the like button on many bookmarks. I confirmed that each bookmark’s like counter increased independently and did not affect other bookmarks. I then refreshed the page and reopened the website to verify that the like counts were still saved for each user and bookmark.
+- We selected different users and clicked the like button on multiple bookmarks.
+- We confirmed that each bookmark’s like counter increased independently and did not affect other bookmarks.
+- We refreshed the page and reopened the website to verify that the like counts were still saved for each user and bookmark.
+
+---
 
 ## 9) The website must contain a form with inputs for a URL, a title, and a description. The form should have a submit button.
 
-**How I tested:**
+**How we tested:**
 
--I opened the website and checked that the form is visible. I confirmed that it contains three input boxes (URL, title, and description) and a submit button. I also entered sample data in all fields and clicked the submit button to make sure the form works correctly.
+- We opened the website and checked that the form is visible.
+- We confirmed that it contains three input fields (URL, title, and description) and a submit button.
+- We entered sample data in all fields and clicked the submit button to make sure the form works correctly.
+
+---
 
 ## 10) Submitting the form adds a new bookmark for the relevant user only
 
-**How I tested it:**
+**How we tested:**
 
-- I selected user number 3.
-- I added a new bookmark for this user. the title is tiktok with the url and description. this bookmark is unique and wasn't added before.
-- after submitting the form, the bookmark is added to only user 3.
-- this was checked by navigating through all other users, to make sure the new bookmark wasn't added there, and also by checking the localstorage in divtools>applications , so I can see only user no. 3 has tiktok bookmark saved.
+- We selected user number 3.
+- We added a new bookmark for this user. The title was TikTok with its URL and description. This bookmark was unique and was not added before.
+- After submitting the form, the bookmark was added only to user 3.
+- This was verified by navigating through all other users to ensure the new bookmark was not added there, and also by checking Local Storage in DevTools > Application, where only user number 3 had the TikTok bookmark saved.
+
+---
 
 ## 11) After creating a new bookmark, the list of bookmarks for the current user is shown, including the new bookmark
 
-**How I tested it:**
+**How we tested:**
 
-- I selected a user with previousely saved 5 bookmarks .
-- Then I added a new bookmark, named yahoo with the url and description.
-- all the 6 bookmarks are displayed including the new one.
+- We selected a user with previously saved 5 bookmarks.
+- We added a new bookmark named Yahoo with its URL and description.
+- All 6 bookmarks were displayed including the new one.
+
+---
 
 ## 12) The website must score 100 for accessibility in Lighthouse
 
-**How I tested it:**
+**How we tested:**
 
-- I ran lighthouse for different users with different bookmarks numbers:
-  case 1 : I selected a user with 3 bookmarks, then the website's accessibility scored 100%
-  case 2 : I selected a user with 0 bookmarks, then the website's accessibility scored 100%
+- We ran Lighthouse in Chrome DevTools under different scenarios:
+  Case 1: We selected a user with 3 bookmarks and confirmed the accessibility score was 100%.
+  Case 2: We selected a user with 0 bookmarks and confirmed the accessibility score was 100%.
+
+---
 
 ## 13) Unit tests must be written for at least one non-trivial function
 
-**How I tested:**
+**How we tested:**
 
-- I tested sortBookmarks() function ,sorting the bookmark in a reverse chronological order feature by writing automated unit tests. I created a test to check that bookmarks are sorted with the newest first. The sorting test used sample bookmark data with different dates and confirmed that the most recent bookmark appears at the beginning of the array.
+- We tested the sortBookmarks() function by writing automated unit tests to verify reverse chronological sorting.
+- We created a test using sample bookmark data with different dates and confirmed that the most recent bookmark appears at the beginning of the array.
+- We also tested getUserIds() to verify the number of users returned is correct.
+- We ran the tests using:
 
-- I tested getUsersIds() to verify the number of users returened is correct.
+npm install  
+npm test

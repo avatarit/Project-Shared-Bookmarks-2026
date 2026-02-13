@@ -12,7 +12,7 @@
       <h1>Shared Bookmarks</h1>
 
       <label for="user-select">Select user:</label>
-      <select id="user-select"></select>
+      <select id="user-select" aria-label="Select user"></select>
     </header>
 
     <main id="main-content">
@@ -33,10 +33,16 @@
         <button id="submit-button" type="submit">Add Bookmark</button>
         <button id="clear-data-btn" type="button">Clear Bookmarks</button>
       </form>
+
       <br />
+
       <section id="bookmark-section">
         <h2>Bookmarks</h2>
-        <p id="no-bookmarks-message" hidden>This user has no bookmarks yet.</p>
+
+        <p id="no-bookmarks-message" hidden role="status" aria-live="polite">
+          This user has no bookmarks yet.
+        </p>
+
         <div id="bookmark-list"></div>
       </section>
     </main>
