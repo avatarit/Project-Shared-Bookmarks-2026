@@ -137,7 +137,7 @@ function renderBookmarks (currentUserId){
         const stored = getData(currentUserId) || [];
         for (let i = 0; i < stored.length; i++) {
           if (stored[i].createdAt === b.createdAt) {
-            stored[i].likes = (stored[i].likes || 0) + 1;
+            stored[i].likes += 1;
             break;
           }
         }
