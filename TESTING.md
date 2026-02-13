@@ -11,7 +11,7 @@ This document explains how we tested each rubric requirement for the Shared Book
 - We opened the website in the browser.
 - We checked the user drop-down and confirmed it contains exactly 5 options: User 1, User 2, User 3, User 4, User 5.
 - We also verified getUserIds() returns ["1","2","3","4","5"] in storage.js.
-- We wrote a unit test that checks:
+- We applied the unit test that checks:
   getUserIds().length === 5
   and ran it using npm test.
 
@@ -136,7 +136,6 @@ This document explains how we tested each rubric requirement for the Shared Book
 
 - We tested the sortBookmarks() function by writing automated unit tests to verify reverse chronological sorting.
 - We created a test using sample bookmark data with different dates and confirmed that the most recent bookmark appears at the beginning of the array.
-- We also tested getUserIds() to verify the number of users returned is correct.
 - We ran the tests using:
 
 npm install  
