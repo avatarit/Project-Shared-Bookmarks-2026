@@ -10,28 +10,29 @@ let currentUserId = "";
 // load users into dropdown
 function loadUsers() {
   const users = getUserIds();
-  
-  //creating the dropdown options
+
   for (let i = 0; i < users.length; i++) {
     const option = document.createElement("option");
     option.value = users[i];
     option.textContent = "User " + users[i];
     userSelect.appendChild(option);
   }
-
-  //for first window load = when no user is selected
-  currentUserId = users[0]; 
-  renderBookmarks(currentUserId);
 }
+
+
+
+  
+
 window.onload = loadUsers;
 
  //to identify which user has been selected using (change) 
- userSelect.addEventListener("change", function(){
-    currentUserId = userSelect.value; 
-    renderBookmarks(currentUserId);
-  });
+ userSelect.addEventListener("change", function () {
+  currentUserId = userSelect.value;
+  if (!currentUserId) return;
+  renderBookmarks(currentUserId);
+});
 
- 
+
 //----------------------  Form  --------------------------- 
 
 const myForm = document.getElementById("bookmark-form");
